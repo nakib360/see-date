@@ -85,24 +85,54 @@ export function getBengaliDate(date) {
 
 // Get Hijri date using Intl API
 export function getHijriDate(date) {
-  const hijriFormatter = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    weekday: 'long'
+  const hijriFormatter = new Intl.DateTimeFormat("en-u-ca-islamic-umalqura", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    weekday: "long"
   });
-  
+
   const parts = hijriFormatter.formatToParts(date);
-  const dayPart = parts.find(p => p.type === 'day');
-  const monthPart = parts.find(p => p.type === 'month');
-  const yearPart = parts.find(p => p.type === 'year');
-  const weekdayPart = parts.find(p => p.type === 'weekday');
-  
+
+  let day = parts.find(p => p.type === "day")?.value;
+  let month = parts.find(p => p.type === "month")?.value;
+  let year = parts.find(p => p.type === "year")?.value;
+  let weekday = parts.find(p => p.type === "weekday")?.value;
+
+  const gregorianMonths = [
+    "January","February","March","April","May","June",
+    "July","August","September","October","November","December"
+  ];
+
+  const hijriMonths = [
+    "Muharram",
+    "Safar",
+    "Rabi al-Awwal",
+    "Rabi al-Thani",
+    "Jumada al-Awwal",
+    "Jumada al-Thani",
+    "Rajab",
+    "Shaban",
+    "Ramadan",
+    "Shawwal",
+    "Dhul Qadah",
+    "Dhul Hijjah"
+  ];
+
+  // fallback check
+  if (gregorianMonths.includes(month)) {
+    const hijriMonthIndex = new Intl.DateTimeFormat("en-u-ca-islamic-umalqura", {
+      month: "numeric"
+    }).format(date) - 1;
+
+    month = hijriMonths[hijriMonthIndex] || month;
+  }
+
   return {
-    day: parseInt(dayPart?.value || '1'),
-    month: monthPart?.value || '',
-    year: parseInt(yearPart?.value || '1'),
-    weekday: weekdayPart?.value || ''
+    day: Number(day),
+    month: month || "",
+    year: Number(year),
+    weekday: weekday || ""
   };
 }
 
