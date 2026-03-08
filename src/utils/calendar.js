@@ -85,7 +85,7 @@ export function getBengaliDate(date) {
 
 // Get Hijri date using Intl API
 export function getHijriDate(date) {
-  const hijriFormatter = new Intl.DateTimeFormat('en-u-ca-islamic', {
+  const hijriFormatter = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
